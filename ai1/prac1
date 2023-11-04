@@ -1,0 +1,21 @@
+git clone https://github.com/YOUR-USERNAME/transformers
+cd transformers
+pip install -e ".[dev]"
+cookiecutter path-to-the folder/adding_a_missing_tokenization_test/ # filepath
+
+! pip install transformers datasets
+! pip install accelerate
+
+notebook_first_cells = [{"type": "code", "content": INSTALL_CONTENT}]
+black_avoid_patterns = {
+    "{processor_class}": "FakeProcessorClass",
+    "{model_class}": "FakeModelClass",
+    "{object_class}": "FakeObjectClass",
+}
+
+from accelerate import Accelerator
+
+accelerator = Accelerator()
+train_dataloader, eval_dataloader, model, optimizer = accelerator.prepare(
+    train_dataloader, eval_dataloader, model, optimizer
+ )
