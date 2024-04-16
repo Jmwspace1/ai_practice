@@ -1,0 +1,63 @@
+class TuringMachine:
+    def __init__(self, states):
+        self.states = states
+        self.tape = [0]
+        self.head_position = 0
+        self.state = 0
+        self.steps = 0
+        self.output = 0
+
+    def step(self):
+        if self.state == -1:
+            return False
+        if self.steps >= 10000:
+            return False
+
+        if self.state == self.states:
+            self.state = -1
+            return False
+
+        if self.tape[self.head_position] == 0:
+            self.tape[self.head_position] = 1
+            self.head_position += 1
+            self.state += 1
+            self.output += 1
+        else:
+            self.tape[self.head_position] = 0
+            self.head_position -= 1
+            self.state -= 1
+            self.output += 1
+            if self.head_position < 0:
+                self.tape.insert(0, 0)
+                self.head_position = 0
+
+        self.steps += 1
+        return True
+
+    def run(self):
+        while self.step():
+            pass
+
+def find_busy_beaver(states):
+    max_output = -1
+    max_machine = None
+
+    for i in range(states):
+        machine = TuringMachine(i)
+        machine.run()
+        output = machine.output
+        if output > max_output:
+            max_output = output
+            max_machine = machine
+
+    return max_machine
+
+def print_tape(machine):
+    print("Tape:", machine.tape)
+    print("Output:", machine.output)
+
+if __name__ == "__main__":
+    states = 3  # Change this to the desired number of states
+    busy_beaver = find_busy_beaver(states)
+    print("Busy Beaver Turing Machine with", states, "states:")
+    print_tape(busy_beaver)
